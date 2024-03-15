@@ -2,13 +2,17 @@
 /**
  * Write a description of class Horse here.
  * 
- * @author (your name) 
+ * @author Hamza Mayou 
  * @version (a version number or a date)
  */
 public class Horse
 {
     //Fields of class Horse
-    
+    String name;
+    char symbol;
+    int distance;
+    boolean fallen;
+    double confidence;
     
       
     //Constructor of class Horse
