@@ -1,9 +1,9 @@
 
 /**
- * Write a description of class Horse here.
+ * This holds the information for Horse objects
  * 
  * @author Hamza Mayou 
- * @version 1
+ * @version 1.1
  */
 public class Horse
 {
@@ -79,9 +79,8 @@ public class Horse
             newConfidence = 0;
         } else if (newConfidence > 1) {
             newConfidence = 1;
-        } else {
-            confidence = newConfidence;
         }
+        this.confidence = newConfidence;
         return;
     }
     

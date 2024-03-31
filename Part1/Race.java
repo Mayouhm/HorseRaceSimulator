@@ -56,6 +56,7 @@ public class Race
         }
     }
     
+    
     /**
      * Start the race
      * The horse are brought to the start and
