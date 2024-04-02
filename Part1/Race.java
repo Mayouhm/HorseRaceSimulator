@@ -6,7 +6,7 @@ import java.lang.Math;
  * for a given distance
  * 
  * @author McFarewell
- * @version 1.0
+ * @version 2.0
  */
 public class Race
 {
@@ -84,8 +84,22 @@ public class Race
             printRace();
             
             //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) )
+            if (raceWonBy(lane1Horse))
             {
+                System.out.println("And the winner is " + lane1Horse.getName());
+                finished = true;
+            } else if (raceWonBy(lane2Horse))
+            {
+                System.out.println("And the winner is " + lane2Horse.getName());
+                finished = true;
+            } else if (raceWonBy(lane3Horse))
+            {
+                System.out.println("And the winner is " + lane3Horse.getName());
+                finished = true;
+            }
+
+            if (lane1Horse.hasFallen() && lane2Horse.hasFallen() && lane3Horse.hasFallen()) {
+                System.out.println("All horses have fallen. No winner");
                 finished = true;
             }
            
@@ -150,6 +164,8 @@ public class Race
     private void printRace()
     {
         System.out.print('\u000C');  //clear the terminal window
+        System.out.flush();
+        System.out.println("\f");
         
         multiplePrint('=',raceLength+3); //top edge of track
         System.out.println();
@@ -190,7 +206,7 @@ public class Race
         //else print the horse's symbol
         if(theHorse.hasFallen())
         {
-            System.out.print('\u2322');
+            System.out.print('X');
         }
         else
         {
@@ -202,6 +218,7 @@ public class Race
         
         //print the | for the end of the track
         System.out.print('|');
+        System.out.print(" " + theHorse.getName() + " (Current Confidence " + theHorse.getConfidence() + ")");
     }
         
     

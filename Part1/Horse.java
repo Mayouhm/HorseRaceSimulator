@@ -1,9 +1,10 @@
+import java.util.Scanner;
 
 /**
  * This holds the information for Horse objects
  * 
  * @author Hamza Mayou 
- * @version 1.1
+ * @version 1.2
  */
 public class Horse
 {
@@ -75,10 +76,10 @@ public class Horse
 
     public void setConfidence(double newConfidence)
     {
-        if (newConfidence < 0) {
-            newConfidence = 0;
-        } else if (newConfidence > 1) {
-            newConfidence = 1;
+        Scanner s = new Scanner(System.in);
+        while (newConfidence < 0 || newConfidence > 1) {
+            System.out.println("Invalid number for " + this.getName() + ". Must be between 0 and 1");
+            newConfidence = Double.parseDouble(s.nextLine());
         }
         this.confidence = newConfidence;
         return;
