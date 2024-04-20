@@ -1,9 +1,13 @@
+package Part1;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
 
 /**
  * This holds the information for Horse objects
- * 
- * @author Hamza Mayou 
+ *
+ * @author Hamza Mayou
  * @version 1.2
  */
 public class Horse
@@ -14,8 +18,9 @@ public class Horse
     private int distance;
     boolean fallen;
     private double confidence;
-    
-      
+    private ImageIcon icon;
+
+
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
@@ -27,42 +32,54 @@ public class Horse
         confidence = horseConfidence;
         fallen = false;
     }
-    
-    
-    
+
+
+
     //Other methods of class Horse
     public void fall()
     {
         fallen = true;
         return;
     }
-    
+
+    public void unfall()
+    {
+        fallen = false;
+        return;
+    }
+
+
     public double getConfidence()
     {
         return this.confidence;
     }
-    
+
     public int getDistanceTravelled()
     {
         return this.distance;
     }
-    
+
     public String getName()
     {
         return this.name;
     }
-    
+
     public char getSymbol()
     {
         return this.symbol;
     }
-    
+
+    public ImageIcon getIcon()
+    {
+        return this.icon;
+    }
+
     public void goBackToStart()
     {
         distance = 0;
         return;
     }
-    
+
     public boolean hasFallen()
     {
         return this.fallen;
@@ -84,10 +101,17 @@ public class Horse
         this.confidence = newConfidence;
         return;
     }
-    
+
     public void setSymbol(char newSymbol)
     {
         symbol = newSymbol;
+        return;
+    }
+
+    public void setIcon(String filePath)
+    {
+        Image img = (new ImageIcon(filePath)).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(img);
         return;
     }
 }
