@@ -19,7 +19,12 @@ import java.util.Random;
 
 public class HorseGraphics {
     static Horse[] horseArray;
+    static JPanel horsePanel = new JPanel(new GridLayout(1, 3));
     public static void main(String[] args) {
+        startRaceGUI();
+    }
+
+    public static void startRaceGUI() {
         JFrame frame = new JFrame("Horse Race");
         JTextArea textArea = new JTextArea(5, 30);
         textArea.setEditable(false);
@@ -43,7 +48,7 @@ public class HorseGraphics {
         JButton addHorseButton = new JButton("+");
         JButton removeHorseButton = new JButton("-");
 
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
         buttonPanel.add(startButton);
         buttonPanel.add(resetButton);
 
@@ -90,7 +95,7 @@ public class HorseGraphics {
 
 
         //Adds Horses at bottom
-        setUpHorses(frame, horseArray);
+        setUpHorses(frame, horsePanel, horseArray);
 
         resetButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -116,8 +121,12 @@ public class HorseGraphics {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    race1.setRaceLength(Integer.parseInt(raceSizeField.getText()));
-                    race1.resetRace();
+                    if (Integer.parseInt(raceSizeField.getText()) <= 35 && Integer.parseInt(raceSizeField.getText()) > 0) {
+                        race1.setRaceLength(Integer.parseInt(raceSizeField.getText()));
+                        race1.resetRace();
+                    } else {
+                        System.out.println("This is in inappropriate length. Must be between 1 and 35!");
+                    }
                 } catch (NumberFormatException n) {
                     System.out.println("Invalid input. Must be integer.");
                 }
@@ -139,7 +148,6 @@ public class HorseGraphics {
                 if (position != -1) {
                     JFrame randFrame = new JFrame("Horse Name");
                     randFrame.setSize(250, 125);
-                    randFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     randFrame.setLocationRelativeTo(null);
 
                     JPanel randPanel = new JPanel();
@@ -158,6 +166,7 @@ public class HorseGraphics {
                     randPanel.add(okButton);
                     randPanel.add(cancelButton);
 
+                    randFrame.setIconImage((new ImageIcon("Part2/images/horse2.png")).getImage());
                     randFrame.add(randPanel);
                     randFrame.setVisible(true);
 
@@ -213,7 +222,7 @@ public class HorseGraphics {
                             Horse horse = new Horse(symbol, name, confidence);
                             race1.addHorse(horse, position);
                             horseArray = addToHorseArray(horseArray, horse, position);
-                            setUpHorses(frame, horseArray);
+                            setUpHorses(frame, horsePanel, horseArray);
                             race1.resetRace();
                         }
                     });
@@ -223,9 +232,6 @@ public class HorseGraphics {
                             randFrame.dispose(); // Close the window when Cancel is clicked
                         }
                     });
-
-
-
                 }
             }
         });
@@ -238,7 +244,7 @@ public class HorseGraphics {
                     try {
                         int positionToRemove = Integer.parseInt(inputValue);
                         horseArray = removeFromHorseArray(race1, horseArray, positionToRemove);
-                        setUpHorses(frame, horseArray);
+                        setUpHorses(frame, horsePanel, horseArray);
                         race1.resetRace();
                     } catch (NumberFormatException n) {
                         System.out.println("Invalid input. Try again!");
@@ -249,6 +255,7 @@ public class HorseGraphics {
             }
         });
 
+        frame.setIconImage((new ImageIcon("Part2/images/horse2.png")).getImage());
         frame.setSize(1500, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -281,28 +288,25 @@ public class HorseGraphics {
         return;
     }
 
-    public static void setUpHorses(JFrame frame, Horse[] horses){
-        JPanel horsePanel = new JPanel(new GridLayout(1, 6));
+    public static JPanel setUpHorses(JFrame frame, JPanel horsePanel, Horse[] horses){
+        horsePanel.removeAll();
         String imageFilePath = "Part2\\images\\horse2.png";
         for (Horse horse : horses){
             if (horse != null ){
-                horse.setIcon(imageFilePath);
-
-                JLabel horseLabel = new JLabel();
-
-                JLabel horseTextLabel = new JLabel(horse.getName());
-
-                Font horseFont = new Font("Arial", Font.PLAIN, 20);
-
-                horseLabel.setIcon(horse.getIcon());
-
-                horsePanel.add(horseLabel);
-                horsePanel.add(horseTextLabel);
-
-                horseTextLabel.setFont(horseFont);
-
+                JButton horseButton = new JButton(horse.getName());
+                horseButton.setPreferredSize(new Dimension(horseButton.getPreferredSize().width, 150));
+                horsePanel.add(horseButton);
                 frame.add(horsePanel, BorderLayout.SOUTH);
+                horseButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        HorseInfo info = new HorseInfo(horse);
+                        info.examineHorse();
+                    }
+                });
+
             }
         }
+        return horsePanel;
     }
 }

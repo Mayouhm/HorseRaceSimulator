@@ -227,7 +227,7 @@ public class Race
             //so if you double the confidence, the probability that it will fall is *2
             if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
             {
-                theHorse.setConfidence(theHorse.getConfidence()-0.1);
+                theHorse.setConfidence(Math.round((theHorse.getConfidence()-0.1) * 10.0) / 10.0);
                 theHorse.fall();
             }
         }
@@ -243,7 +243,7 @@ public class Race
     {
         if (theHorse.getDistanceTravelled() == raceLength)
         {
-            theHorse.setConfidence(theHorse.getConfidence()+0.1);
+            theHorse.setConfidence(Math.round((theHorse.getConfidence()+0.1) * 10.0) / 10.0);
             return true;
         }
         else

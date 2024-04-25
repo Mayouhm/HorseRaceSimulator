@@ -29,7 +29,7 @@ public class Horse
     {
         symbol = horseSymbol;
         name = horseName.toUpperCase();
-        confidence = horseConfidence;
+        confidence = Math.round(horseConfidence * 10.0) / 10.0;
         fallen = false;
     }
 
@@ -103,7 +103,7 @@ public class Horse
         } else if (newConfidence > 1) {
             newConfidence = 0.9;
         }
-        this.confidence = newConfidence;
+        this.confidence = Math.round(newConfidence * 10.0) / 10.0;
         return;
     }
 
