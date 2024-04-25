@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class HorseGraphics {
@@ -84,12 +85,6 @@ public class HorseGraphics {
         }
 
         horseArray = removeFromHorseArray(race1, horseArray, 3);
-        /*
-        race1.removeHorse(2);
-        removeFromHorseArray(horseArray, 2);
-        race1.removeHorse(3);
-        removeFromHorseArray(horseArray, 3);
-         */
 
         race1.resetRace();
 
@@ -137,82 +132,100 @@ public class HorseGraphics {
                 for (int i = 0; i < horses1.length; i++) {
                     if (horses1[i] == null) {
                         position = i + 1;
+                        break;
                     }
                 }
 
                 if (position != -1) {
-                    JDialog randomiseOption = new JDialog(frame, "Randomise Horse?", true);
-                    randomiseOption.setLayout(new FlowLayout());
+                    JFrame randFrame = new JFrame("Horse Name");
+                    randFrame.setSize(250, 125);
+                    randFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    randFrame.setLocationRelativeTo(null);
 
-                    JButton yesButton = new JButton("Yes");
-                    yesButton.addActionListener(new ActionListener() {
+                    JPanel randPanel = new JPanel();
+                    randPanel.setLayout(new FlowLayout());
+
+                    JLabel nameLabel = new JLabel("What's the name of the horse?");
+                    JTextField nameField = new JTextField(15);
+                    JButton randomizeButton = new JButton("R");
+                    JButton okButton = new JButton("OK");
+                    JButton cancelButton = new JButton("Cancel");
+
+
+                    randPanel.add(nameLabel);
+                    randPanel.add(nameField);
+                    randPanel.add(randomizeButton);
+                    randPanel.add(okButton);
+                    randPanel.add(cancelButton);
+
+                    randFrame.add(randPanel);
+                    randFrame.setVisible(true);
+
+                    randomizeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            randomise = true;
-                            randomiseOption.dispose();
-                        }
-                    });
+                            ArrayList<String> names = new ArrayList<>();
 
-                    JButton noButton = new JButton("No");
-                    noButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            randomise = false;
-                            randomiseOption.dispose();
-                        }
-                    });
+                            try (BufferedReader br = new BufferedReader(new FileReader("Part2/horseNames.txt"))) {
+                                String line;
+                                while ((line = br.readLine()) != null) {
+                                    names.add(line);
+                                }
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            } catch (RuntimeException er) {
 
-                    randomiseOption.add(new JLabel("Do you want to randomise horse name?"));
-                    randomiseOption.add(yesButton);
-                    randomiseOption.add(noButton);
-
-                    randomiseOption.setSize(500, 100);
-                    randomiseOption.setLocationRelativeTo(frame);
-                    randomiseOption.setVisible(true);
-                    String name;
-                    if (!randomise) {
-                        name = JOptionPane.showInputDialog("What's the name of the horse?");
-                    } else {
-                        ArrayList<String> names = new ArrayList<>();
-
-                        try (BufferedReader br = new BufferedReader(new FileReader("Part2/horseNames.txt"))) {
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                names.add(line);
                             }
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        } catch (RuntimeException er) {
 
+                            Random rand = new Random();
+                            int randomIndex = rand.nextInt(names.size());
+                            String name = names.get(randomIndex);
+                            nameField.setText(name);
                         }
+                    });
 
-                        Random rand = new Random();
-                        int randomIndex = rand.nextInt(names.size());
-                        name = names.get(randomIndex);
-                    }
-                    String symbolStr = JOptionPane.showInputDialog("What symbol are you using? Must be one character!");
-                    char symbol = 'X';
-                    try {
-                        symbol = symbolStr.charAt(0);
-                    } catch (StringIndexOutOfBoundsException n) {
-                        System.out.println("Must be a single character");
-                    }
-                    String confidenceStr = JOptionPane.showInputDialog("What's the confidence? Must be between 0 and 1.");
-                    double confidence = 0.1;
-                    try {
-                        confidence = Double.parseDouble(confidenceStr);
-                        if (confidence < 0 || confidence > 1) {
-                            System.out.println("Invalid input. Must be between 0 and 1.");
+                    okButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String name = nameField.getText();;
+                            if (name.equals("")) {
+                                name = "NOTHING";
+                            }
+
+                            randFrame.dispose();
+                            String symbolStr = JOptionPane.showInputDialog("What symbol are you using? Must be one character!");
+                            char symbol = 'X';
+                            try {
+                                symbol = symbolStr.charAt(0);
+                            } catch (StringIndexOutOfBoundsException n) {
+                                System.out.println("Must be a single character");
+                            }
+                            String confidenceStr = JOptionPane.showInputDialog("What's the confidence? Must be between 0 and 1.");
+                            double confidence = 0.1;
+                            try {
+                                confidence = Double.parseDouble(confidenceStr);
+                                if (confidence < 0 || confidence > 1) {
+                                    System.out.println("Invalid input. Must be between 0 and 1.");
+                                }
+                            } catch (NumberFormatException n) {
+                                System.out.println("Invalid input. Try again!");
+                            }
+                            Horse horse = new Horse(symbol, name, confidence);
+                            race1.addHorse(horse, position);
+                            horseArray = addToHorseArray(horseArray, horse, position);
+                            setUpHorses(frame, horseArray);
+                            race1.resetRace();
                         }
-                    } catch (NumberFormatException n) {
-                        System.out.println("Invalid input. Try again!");
-                    }
-                    Horse horse = new Horse(symbol, name, confidence);
-                    race1.addHorse(horse, position);
-                    horseArray = addToHorseArray(horseArray, horse, position);
-                    setUpHorses(frame, horseArray);
-                    race1.resetRace();
-                    arrayPrinter(horses1);
+                    });
+                    cancelButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            randFrame.dispose(); // Close the window when Cancel is clicked
+                        }
+                    });
+
+
+
                 }
             }
         });
@@ -227,14 +240,12 @@ public class HorseGraphics {
                         horseArray = removeFromHorseArray(race1, horseArray, positionToRemove);
                         setUpHorses(frame, horseArray);
                         race1.resetRace();
-
                     } catch (NumberFormatException n) {
                         System.out.println("Invalid input. Try again!");
                     }
                 } else {
                     System.out.println("Can't remove any more horses");
                 }
-
             }
         });
 
@@ -260,7 +271,7 @@ public class HorseGraphics {
         race.removeHorse(position);
         return horses;
     }
-    public static <T> void arrayPrinter(T[] givenArray) {
+    public static void arrayPrinter(Horse[] givenArray) {
         String generatedString = "{";
         for (int i = 0; i < givenArray.length - 1; i++) {
             generatedString = generatedString + givenArray[i] + ", ";
@@ -273,35 +284,6 @@ public class HorseGraphics {
     public static void setUpHorses(JFrame frame, Horse[] horses){
         JPanel horsePanel = new JPanel(new GridLayout(1, 6));
         String imageFilePath = "Part2\\images\\horse2.png";
-        /*horse1.setIcon(imageFilePath);
-        horse2.setIcon(imageFilePath);
-        horse3.setIcon(imageFilePath);
-
-        JLabel horse1Label = new JLabel();
-        JLabel horse2Label = new JLabel();
-        JLabel horse3Label = new JLabel();
-
-        JLabel horse1TextLabel = new JLabel(horse1.getName());
-        JLabel horse2TextLabel = new JLabel(horse2.getName());
-        JLabel horse3TextLabel = new JLabel(horse3.getName());
-
-        Font horseFont = new Font("Arial", Font.PLAIN, 20);
-
-        horse1Label.setIcon(horse1.getIcon());
-        horse2Label.setIcon(horse2.getIcon());
-        horse3Label.setIcon(horse3.getIcon());
-
-        horsePanel.add(horse1Label);
-        horsePanel.add(horse1TextLabel);
-        horsePanel.add(horse2Label);
-        horsePanel.add(horse2TextLabel);
-        horsePanel.add(horse3Label);
-        horsePanel.add(horse3TextLabel);
-
-        horse1TextLabel.setFont(horseFont);
-        horse2TextLabel.setFont(horseFont);
-        horse3TextLabel.setFont(horseFont);
-        frame.add(horsePanel, BorderLayout.SOUTH);*/
         for (Horse horse : horses){
             if (horse != null ){
                 horse.setIcon(imageFilePath);

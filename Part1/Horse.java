@@ -28,7 +28,7 @@ public class Horse
     public Horse(char horseSymbol, String horseName, double horseConfidence)
     {
         symbol = horseSymbol;
-        name = horseName;
+        name = horseName.toUpperCase();
         confidence = horseConfidence;
         fallen = false;
     }
