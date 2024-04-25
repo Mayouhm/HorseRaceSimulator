@@ -93,10 +93,15 @@ public class Horse
 
     public void setConfidence(double newConfidence)
     {
-        Scanner s = new Scanner(System.in);
+        /*Scanner s = new Scanner(System.in);
         while (newConfidence < 0 || newConfidence > 1) {
             System.out.println("Invalid number for " + this.getName() + ". Must be between 0 and 1");
             newConfidence = Double.parseDouble(s.nextLine());
+        }*/
+        if (newConfidence < 0) {
+            newConfidence = 0.1;
+        } else if (newConfidence > 1) {
+            newConfidence = 0.9;
         }
         this.confidence = newConfidence;
         return;

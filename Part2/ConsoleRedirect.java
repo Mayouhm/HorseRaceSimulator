@@ -33,7 +33,6 @@ public class ConsoleRedirect {
         };
 
         System.setOut(new PrintStream(out, true));
-        System.setErr(new PrintStream(out, true));
     }
 
     private void updateTextArea(final String text) {

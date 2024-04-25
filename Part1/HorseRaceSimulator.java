@@ -7,6 +7,7 @@ class HorseRaceSimulator {
         Horse horse1 = new Horse('\u265E', "GLITTERHOOF", 0.78);
         Horse horse2 = new Horse('\u2658', "RAINBOW DASH", 0.3);
         Horse horse3 = new Horse('\u2EE2', "BOJACK", 0.65);
+        Horse horse4 = new Horse('\u2655', "TWILIGHT SPARKLE", 0.4);
 
         horse1.setConfidence(0.78);
         //horse2.setConfidence(3);
@@ -21,6 +22,7 @@ class HorseRaceSimulator {
         race1.addHorse(horse1, 1);
         race1.addHorse(horse2, 2);
         race1.addHorse(horse3, 3);
+        race1.addHorse(horse4, 4);
         race1.startRace();
     }
 
