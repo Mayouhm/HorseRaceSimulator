@@ -31,6 +31,8 @@ public class Horse
         name = horseName.toUpperCase();
         confidence = Math.round(horseConfidence * 10.0) / 10.0;
         fallen = false;
+        icon = new ImageIcon((new ImageIcon("Part2/images/horse2.png")).
+                getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
     }
 
 

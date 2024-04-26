@@ -198,7 +198,7 @@ public class HorseGraphics {
                         public void actionPerformed(ActionEvent e) {
                             String name = nameField.getText();;
                             if (name.equals("")) {
-                                name = "NOTHING";
+                                name = "NEMO";
                             }
 
                             randFrame.dispose();
