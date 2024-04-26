@@ -76,13 +76,47 @@ public class HorseInfo {
                 Image img = (combinedImageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
                 Icon icon = new ImageIcon(img);
                 imageLabel.setIcon(icon);
-
-
             }
         });
-        customiseButton.setPreferredSize(new Dimension(customiseButton.getPreferredSize().width, 100));
 
-        imagePanel.add(customiseButton, BorderLayout.SOUTH);
+        JButton searchCustomisationButton = new JButton("Search Customisation");
+        searchCustomisationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> customisations = new ArrayList<>();
+
+                try (BufferedReader br = new BufferedReader(
+                        new FileReader("Part2/images/accessories/accessories.txt"))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        customisations.add(line);
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RuntimeException er) {
+
+                }
+
+                String customisation = JOptionPane.showInputDialog("What's the customisation that you want?").toLowerCase();
+                if(customisations.contains(customisation + ".png")) {
+                    horse.setIcon(new ImageIcon((horse.getIcon()).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH)));
+                    ImageIcon combinedImageIcon = combineImages("Part2/images/accessories/" + customisation + ".png");
+                    horse.setIcon(combinedImageIcon);
+                    Image img = (combinedImageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
+                    Icon icon = new ImageIcon(img);
+                    imageLabel.setIcon(icon);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "This is not a valid customisation");
+                }
+            }
+        });
+
+        customiseButton.setPreferredSize(new Dimension(200, 50));
+        searchCustomisationButton.setPreferredSize(new Dimension(200, 130));
+
+        imagePanel.add(searchCustomisationButton, BorderLayout.SOUTH);
+        imagePanel.add(customiseButton, BorderLayout.CENTER);
 
         frame.add(imagePanel, BorderLayout.EAST);
 
