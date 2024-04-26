@@ -318,6 +318,10 @@ public class HorseGraphics {
             }
         });
 
+        titlePanel.setBackground(new Color(252, 182, 3));
+        textArea.setBackground(new Color(255, 181, 185));
+
+
         frame.setIconImage((new ImageIcon("Part2/images/horse2.png")).getImage());
         frame.setSize(1500, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
