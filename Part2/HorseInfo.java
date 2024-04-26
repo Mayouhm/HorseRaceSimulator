@@ -42,7 +42,7 @@ public class HorseInfo {
 
         JPanel imagePanel = new JPanel(new BorderLayout());
         JLabel imageLabel = new JLabel();
-        Image img = (horse.getIcon().getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
+        Image img = (horse.getIcon()).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         Icon icon = new ImageIcon(img);
         imageLabel.setIcon(icon);
 
@@ -70,7 +70,8 @@ public class HorseInfo {
                 int randomIndex = rand.nextInt(imageNames.size());
                 String selectedImageName = imageNames.get(randomIndex);
 
-                ImageIcon combinedImageIcon = makeNewImage("Part2/images/accessories/" + selectedImageName);
+                horse.setIcon(new ImageIcon((horse.getIcon()).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH)));
+                ImageIcon combinedImageIcon = combineImages("Part2/images/accessories/" + selectedImageName);
                 horse.setIcon(combinedImageIcon);
                 Image img = (combinedImageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
                 Icon icon = new ImageIcon(img);
@@ -90,7 +91,7 @@ public class HorseInfo {
         frame.setVisible(true);
     }
 
-    public static ImageIcon makeNewImage(String accessoryFilePath) {
+    public static ImageIcon combineImages(String accessoryFilePath) {
         ImageIcon image1 = new ImageIcon("Part2/images/horse2.png");
         ImageIcon image2 = new ImageIcon(accessoryFilePath);
 
@@ -106,8 +107,46 @@ public class HorseInfo {
         ImageIcon combinedImageIcon = new ImageIcon(combinedImage);
         return combinedImageIcon;
     }
+
+    public static ImageIcon combineImages(ImageIcon combinedAccessories) {
+        ImageIcon image1 = new ImageIcon("Part2/images/horse2.png");
+        ImageIcon image2 = combinedAccessories;
+
+        BufferedImage combinedImage = new BufferedImage(
+                Math.max(image1.getIconWidth(), image2.getIconWidth()),
+                Math.max(image1.getIconHeight(), image2.getIconHeight()),
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = combinedImage.createGraphics();
+        g2d.drawImage(image1.getImage(), 0, 0, null);
+        g2d.drawImage(image2.getImage(), 0, 0, null);
+        g2d.dispose();
+        ImageIcon combinedImageIcon = new ImageIcon(combinedImage);
+        return combinedImageIcon;
+    }
+
+    public static ImageIcon combineImages(String firstImagePath, String secondImagePath) {
+        ImageIcon image1 = new ImageIcon(firstImagePath);
+        ImageIcon image2 = new ImageIcon(secondImagePath);
+
+        BufferedImage combinedImage = new BufferedImage(
+                Math.max(image1.getIconWidth(), image2.getIconWidth()),
+                Math.max(image1.getIconHeight(), image2.getIconHeight()),
+                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = combinedImage.createGraphics();
+        g2d.drawImage(image1.getImage(), 0, 0, null);
+        g2d.drawImage(image2.getImage(), 0, 0, null);
+        g2d.dispose();
+        ImageIcon combinedImageIcon = new ImageIcon(combinedImage);
+        return combinedImageIcon;
+    }
+
     public static void main(String[] args) {
-        HorseInfo info = new HorseInfo(new Horse('A', "RIDER", 0.4));
+        Horse horse = new Horse('A', "RIDER", 0.4);
+        horse.setName("INCITATUS");
+        HorseInfo info = new HorseInfo(horse);
+
         info.examineHorse();
     }
 }

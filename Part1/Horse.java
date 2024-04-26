@@ -1,8 +1,9 @@
 package Part1;
 
+import Part2.HorseInfo;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.Scanner;
 
 /**
  * This holds the information for Horse objects
@@ -32,7 +33,7 @@ public class Horse
         confidence = Math.round(horseConfidence * 10.0) / 10.0;
         fallen = false;
         icon = new ImageIcon((new ImageIcon("Part2/images/horse2.png")).
-                getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+                getImage().getScaledInstance(275, 275, Image.SCALE_SMOOTH));
     }
 
 
@@ -94,6 +95,15 @@ public class Horse
     }
 
     public void setName(String newName) {
+        if (newName.toUpperCase().equals("TWILIGHT SPARKLE")){
+            HorseInfo info = new HorseInfo(this);
+            ImageIcon combinedAccecessories = info.combineImages
+                    ("Part2/images/accessories/pegasus.png", "Part2/images/accessories/corn.png");
+            setIcon(info.combineImages(combinedAccecessories));
+        } else if (newName.toUpperCase().equals("INCITATUS")) {
+            HorseInfo info = new HorseInfo(this);
+            setIcon(info.combineImages("Part2/images/accessories/immortal.png"));
+        }
         name = newName.toUpperCase();
         return;
     }
@@ -122,7 +132,7 @@ public class Horse
 
     public void setIcon(String filePath)
     {
-        Image img = (new ImageIcon(filePath)).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        Image img = (new ImageIcon(filePath)).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         icon = new ImageIcon(img);
         return;
     }

@@ -25,15 +25,20 @@ public class HorseGraphics {
     }
 
     public static void startRaceGUI() {
-        JFrame frame = new JFrame("Horse Race");
+        JFrame frame = new JFrame("Horsin Around");
         JTextArea textArea = new JTextArea(5, 30);
         textArea.setEditable(false);
         textArea.setFont(new Font("Helvetica Neue", Font.PLAIN, 30));
 
         JPanel titlePanel = new JPanel();
+        /*
         JLabel titleLabel = new JLabel("Horse Race");
         Font titleFont = new Font("Arial", Font.BOLD, 40);
         titleLabel.setFont(titleFont);
+         */
+        JLabel titleLabel = new JLabel();
+        Icon icon = new ImageIcon("Part2/images/title.png");
+        titleLabel.setIcon(icon);
         titlePanel.add(titleLabel);
         frame.add(titlePanel, BorderLayout.NORTH);
 
@@ -73,26 +78,16 @@ public class HorseGraphics {
         Horse horse1 = new Horse('\u265E', "GLITTERHOOF", 0.78);
         Horse horse2 = new Horse('\u2658', "RAINBOW DASH", 0.5);
         Horse horse3 = new Horse('\u265B', "BOJACK", 0.65);
-        Horse horse4 = new Horse('\u265A', "CLEVER HANS", 0.7);
-        Horse horse5 = new Horse('\u2655', "THE HOUYHNHNM", 0.4);
-        Horse horse6 = new Horse('\u2657', "NAPOLEON", 0.8);
         horseArray = addToHorseArray(horseArray, horse1, 1);
         horseArray = addToHorseArray(horseArray, horse2, 2);
         horseArray = addToHorseArray(horseArray, horse3, 3);
-        horseArray = addToHorseArray(horseArray, horse4, 4);
-        horseArray = addToHorseArray(horseArray, horse5, 5);
-        horseArray = addToHorseArray(horseArray, horse6, 6);
 
         Race race1 = new Race(10);
 
         for (int i = 0; i < horseArray.length; i++) {
             race1.addHorse(horseArray[i], i+1);
         }
-
-        horseArray = removeFromHorseArray(race1, horseArray, 3);
-
         race1.resetRace();
-
 
         //Adds Horses at bottom
         setUpHorses(frame, horsePanel, horseArray);
@@ -138,6 +133,10 @@ public class HorseGraphics {
             int position = -1;
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (horses1[5] != null) {
+                    System.out.println("Too many horses");
+                    return;
+                }
                 for (int i = 0; i < horses1.length; i++) {
                     if (horses1[i] == null) {
                         position = i + 1;
@@ -254,7 +253,7 @@ public class HorseGraphics {
                             okButton.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    char symbol = 'F';
+                                    char symbol = '\u297E';
                                     try {
                                         symbol = symbolField.getText().charAt(0);;
                                     } catch (StringIndexOutOfBoundsException s) {
@@ -265,7 +264,7 @@ public class HorseGraphics {
                                     symbolFrame.dispose();
 
                                     String confidenceStr = JOptionPane.showInputDialog("What's the confidence? Must be between 0 and 1.");
-                                    double confidence = 0.1;
+                                    double confidence = 0.5;
                                     try {
                                         confidence = Double.parseDouble(confidenceStr);
                                         if (confidence < 0 || confidence > 1) {
@@ -354,7 +353,6 @@ public class HorseGraphics {
 
     public static JPanel setUpHorses(JFrame frame, JPanel horsePanel, Horse[] horses){
         horsePanel.removeAll();
-        String imageFilePath = "Part2\\images\\horse2.png";
         for (Horse horse : horses){
             if (horse != null ){
                 JButton horseButton = new JButton(horse.getName());
