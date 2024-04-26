@@ -159,7 +159,6 @@ public class HorseGraphics {
                     JButton okButton = new JButton("OK");
                     JButton cancelButton = new JButton("Cancel");
 
-
                     randPanel.add(nameLabel);
                     randPanel.add(nameField);
                     randPanel.add(randomizeButton);
@@ -169,6 +168,7 @@ public class HorseGraphics {
                     randFrame.setIconImage((new ImageIcon("Part2/images/horse2.png")).getImage());
                     randFrame.add(randPanel);
                     randFrame.setVisible(true);
+                    Horse horse = new Horse('x', "na", 0.5);
 
                     randomizeButton.addActionListener(new ActionListener() {
                         @Override
@@ -200,36 +200,100 @@ public class HorseGraphics {
                             if (name.equals("")) {
                                 name = "NEMO";
                             }
+                            horse.setName(name);
 
                             randFrame.dispose();
-                            String symbolStr = JOptionPane.showInputDialog("What symbol are you using? Must be one character!");
-                            char symbol = 'X';
-                            try {
-                                symbol = symbolStr.charAt(0);
-                            } catch (StringIndexOutOfBoundsException n) {
-                                System.out.println("Must be a single character");
-                            }
-                            String confidenceStr = JOptionPane.showInputDialog("What's the confidence? Must be between 0 and 1.");
-                            double confidence = 0.1;
-                            try {
-                                confidence = Double.parseDouble(confidenceStr);
-                                if (confidence < 0 || confidence > 1) {
-                                    System.out.println("Invalid input. Must be between 0 and 1.");
+
+                            JFrame symbolFrame = new JFrame("Horse Name");
+                            symbolFrame.setSize(325, 125);
+                            symbolFrame.setLocationRelativeTo(null);
+
+                            JPanel symbolPanel = new JPanel();
+                            symbolPanel.setLayout(new FlowLayout());
+
+                            JLabel symbolLabel = new JLabel("What symbol are you using? Must be one character!");
+                            JTextField symbolField = new JTextField(20);
+                            JButton symbRandomiseButton = new JButton("R");
+                            JButton okButton = new JButton("OK");
+                            JButton cancelButton = new JButton("Cancel");
+
+                            symbolPanel.add(symbolLabel);
+                            symbolPanel.add(symbolField);
+                            symbolPanel.add(symbRandomiseButton);
+                            symbolPanel.add(okButton);
+                            symbolPanel.add(cancelButton);
+
+                            symbolFrame.setIconImage((new ImageIcon("Part2/images/knightqueen.png")).getImage());
+                            symbolFrame.add(symbolPanel);
+                            symbolFrame.setVisible(true);
+
+                            symbRandomiseButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    ArrayList<String> symbols = new ArrayList<>();
+
+                                    try (BufferedReader br = new BufferedReader(new FileReader("Part2/horseSymbols.txt"))) {
+                                        String line;
+                                        while ((line = br.readLine()) != null) {
+                                            symbols.add(line);
+                                        }
+                                    } catch (IOException ex) {
+                                        throw new RuntimeException(ex);
+                                    } catch (RuntimeException er) {
+
+                                    }
+
+                                    Random rand = new Random();
+                                    int randomIndex = rand.nextInt(symbols.size());
+                                    String symbol = symbols.get(randomIndex);
+                                    symbolField.setText(symbol);
                                 }
-                            } catch (NumberFormatException n) {
-                                System.out.println("Invalid input. Try again!");
-                            }
-                            Horse horse = new Horse(symbol, name, confidence);
-                            race1.addHorse(horse, position);
-                            horseArray = addToHorseArray(horseArray, horse, position);
-                            setUpHorses(frame, horsePanel, horseArray);
-                            race1.resetRace();
+
+                            });
+
+                            okButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    char symbol = 'F';
+                                    try {
+                                        symbol = symbolField.getText().charAt(0);;
+                                    } catch (StringIndexOutOfBoundsException s) {
+                                        System.out.println("Must be a single character");
+                                    }
+                                    horse.setSymbol(symbol);
+
+                                    symbolFrame.dispose();
+
+                                    String confidenceStr = JOptionPane.showInputDialog("What's the confidence? Must be between 0 and 1.");
+                                    double confidence = 0.1;
+                                    try {
+                                        confidence = Double.parseDouble(confidenceStr);
+                                        if (confidence < 0 || confidence > 1) {
+                                            System.out.println("Invalid input. Must be between 0 and 1.");
+                                        }
+                                    } catch (NumberFormatException n) {
+                                        System.out.println("Invalid input. Try again!");
+                                    }
+                                    horse.setConfidence(confidence);
+                                    race1.addHorse(horse, position);
+                                    horseArray = addToHorseArray(horseArray, horse, position);
+                                    setUpHorses(frame, horsePanel, horseArray);
+                                    race1.resetRace();
+                                }
+                            });
+
+                            cancelButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    symbolFrame.dispose();
+                                }
+                            });
                         }
                     });
                     cancelButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            randFrame.dispose(); // Close the window when Cancel is clicked
+                            randFrame.dispose();
                         }
                     });
                 }

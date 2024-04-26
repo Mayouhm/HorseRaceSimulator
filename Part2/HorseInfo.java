@@ -42,8 +42,7 @@ public class HorseInfo {
 
         JPanel imagePanel = new JPanel(new BorderLayout());
         JLabel imageLabel = new JLabel();
-        String filePath = "Part2/images/horse2.png";
-        Image img = (new ImageIcon(filePath)).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+        Image img = (horse.getIcon().getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
         Icon icon = new ImageIcon(img);
         imageLabel.setIcon(icon);
 
@@ -72,9 +71,12 @@ public class HorseInfo {
                 String selectedImageName = imageNames.get(randomIndex);
 
                 ImageIcon combinedImageIcon = makeNewImage("Part2/images/accessories/" + selectedImageName);
+                horse.setIcon(combinedImageIcon);
                 Image img = (combinedImageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
                 Icon icon = new ImageIcon(img);
                 imageLabel.setIcon(icon);
+
+
             }
         });
         customiseButton.setPreferredSize(new Dimension(customiseButton.getPreferredSize().width, 100));
@@ -86,7 +88,6 @@ public class HorseInfo {
         frame.setIconImage((horse.getIcon()).getImage());
         frame.setSize(600, 600);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public static ImageIcon makeNewImage(String accessoryFilePath) {

@@ -93,6 +93,11 @@ public class Horse
         return;
     }
 
+    public void setName(String newName) {
+        name = newName.toUpperCase();
+        return;
+    }
+
     public void setConfidence(double newConfidence)
     {
         /*Scanner s = new Scanner(System.in);
@@ -119,6 +124,12 @@ public class Horse
     {
         Image img = (new ImageIcon(filePath)).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         icon = new ImageIcon(img);
+        return;
+    }
+
+    public void setIcon(ImageIcon newIcon)
+    {
+        icon = newIcon;
         return;
     }
 }
